@@ -1,6 +1,7 @@
 {-# LANGUAGE InstanceSigs #-}
 module PreParser
-    ( PreRegex
+    ( PreRegex(..)
+    , Terminal(..)
     , preParse
     ) where
 
@@ -19,6 +20,7 @@ data Terminal
     | Simbo Char
     | Punto
     | Epsil
+    deriving(Eq)
 
 -- forma d ever para debuggeo
 instance Show PreRegex where
@@ -97,7 +99,7 @@ preParser (SUBREGEX xs) (c:cs) =
                 corchetesAux = consumeCad [] cs
             in case corchetesAux of
                 ([], [])           -> err
-                (corchetes, resto) -> preParser (TERMINAL (Rango corchetes)) resto
+                (corchetes, resto) -> preParser (SUBREGEX $ TERMINAL (Rango corchetes) :xs) resto
         RCOR -> err  -- Este caso nunca debería darse
 
 preParser _ _                  = err
