@@ -3,18 +3,9 @@ module Parser
     , parse
     ) where
 
-import PreParser (PreRegex(..), Terminal)
-import Lexer (Token(..))
-
-data Regex
-    = Null --Valor base para poder tener un acumulador inicial
-    | Ter Terminal
-    | Dis Regex Regex -- |
-    | Sec Regex Regex -- αβ
-    | Mas Regex -- +
-    | Rep Regex -- *
-    | Int Regex -- ?
-    deriving (Eq, Show)
+import PreRegex
+import Token
+import Regex
 
 parse :: PreRegex -> Regex
 parse = construyeRegex Null 
@@ -28,7 +19,7 @@ construyeRegex acc (SUBREGEX []) = acc
 construyeRegex Null (SUBREGEX (x:xs)) =
     case x of
         (SUBREGEX _) -> construyeRegex (construyeRegex Null x) (SUBREGEX xs)
-        (TERMINAL t) -> construyeRegex (Ter t) (SUBREGEX xs)
+        (TERMINAL t) -> construyeRegex (Ter False t) (SUBREGEX xs)
         _ -> Null
 construyeRegex acc (SUBREGEX (x:xs)) =
     case x of
@@ -37,6 +28,6 @@ construyeRegex acc (SUBREGEX (x:xs)) =
         (OPERADOR ESTRELLA) -> construyeRegex (Rep acc) (SUBREGEX xs)
         (OPERADOR MAS) -> construyeRegex (Mas acc) (SUBREGEX xs)
         (SUBREGEX _) -> construyeRegex (Sec acc (construyeRegex Null x)) (SUBREGEX xs)
-        (TERMINAL t) -> construyeRegex (Sec acc (Ter t)) (SUBREGEX xs)
+        (TERMINAL t) -> construyeRegex (Sec acc (Ter False t)) (SUBREGEX xs)
         _ -> Null
 construyeRegex _ _ = Null

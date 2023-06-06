@@ -25,9 +25,13 @@ source-repository head
 
 library
   exposed-modules:
+      Afd
       Lexer
       Parser
       PreParser
+      PreRegex
+      Regex
+      Token
   other-modules:
       Paths_regex_afd
   hs-source-dirs:

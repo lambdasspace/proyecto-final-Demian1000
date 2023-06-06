@@ -1,8 +1,9 @@
 module Main (main) where
 
-import Lexer
-import PreParser
-import Parser
+import Lexer ( lexer )
+import PreParser ( preParse )
+import Parser ( parse )
+import Afd ( shift )
 
 main :: IO ()
 main = do
@@ -12,6 +13,9 @@ main = do
   case lexer "abcdefghijklmnñopqrstuvwxyz" '-' input of
     Just tokens -> do
       case preParse  tokens of
-        Just algo -> putStrLn $ ":" ++ show (parse algo)
+        Just algo -> do
+          let regex = parse algo
+          print algo
+          print (shift True regex 'g')
         Nothing -> putStrLn "Error en el pre parseo."
     Nothing -> putStrLn "Invalid regular expression."

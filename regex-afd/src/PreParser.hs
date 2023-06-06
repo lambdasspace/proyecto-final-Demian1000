@@ -1,42 +1,12 @@
-{-# LANGUAGE InstanceSigs #-}
 module PreParser
     ( PreRegex(..)
     , Terminal(..)
     , preParse
     ) where
 
-import Lexer (Token(..))
-
--- Tipo recursivo para poder tener listas de Tokens dentro de listas de tokens, etc.
-data PreRegex
-    = OPERADOR Token
-    | SUBREGEX [PreRegex]
-    | TERMINAL Terminal
-
--- tipo de dato para encapsular todo slos tipos de terminales
-data Terminal
-    = Rango String
-    | Negac Char
-    | Simbo Char
-    | Punto
-    | Epsil
-    deriving(Eq)
-
--- forma d ever para debuggeo
-instance Show PreRegex where
-    show :: PreRegex -> String
-    show (OPERADOR o) = show o
-    show (SUBREGEX ls) = show ls
-    show (TERMINAL t) = show t
-
--- forma de ver para debuggeo
-instance Show Terminal where
-    show :: Terminal -> String
-    show (Rango r) = "[" ++ r ++ "]"
-    show (Negac n) = "~" ++ [n]
-    show (Simbo s) = [s]
-    show Punto = "."
-    show Epsil = "ε"
+import Token
+import PreRegex
+import Regex (Terminal(..))
 
 --parentesis balanceados
 --corchetes bien ponidos
@@ -52,7 +22,27 @@ preParse tokens =
     case preParser (SUBREGEX []) tokens of
         (SUBREGEX [], []) -> Nothing
         (_, _:_)          -> Nothing
-        (preregex, [])    -> Just $ reversa preregex
+        (preregex, [])    -> Just $ opUnario $ reversa preregex
+
+opUnario :: PreRegex -> PreRegex
+opUnario (SUBREGEX ls) =
+    let
+        recursive (SUBREGEX [z, OPERADOR INTERROGACION]) = SUBREGEX [recursive z, OPERADOR INTERROGACION]
+        recursive (SUBREGEX [z, OPERADOR ESTRELLA]) = SUBREGEX [recursive z, OPERADOR ESTRELLA]
+        recursive (SUBREGEX [z, OPERADOR MAS]) = SUBREGEX [recursive z, OPERADOR MAS]
+        recursive (SUBREGEX [z, w]) = SUBREGEX [recursive z, recursive w]
+        recursive x = opUnario x
+    in
+        case ls of
+            [] -> SUBREGEX []
+            [c] -> SUBREGEX [recursive c]
+            (c:cs:css) -> case cs of
+                (OPERADOR INTERROGACION) -> opUnario $ SUBREGEX $ SUBREGEX [recursive c, cs] :css
+                (OPERADOR ESTRELLA) -> opUnario $ SUBREGEX $ SUBREGEX [recursive c, cs] :css
+                (OPERADOR MAS) -> opUnario $ SUBREGEX $ SUBREGEX [recursive c, cs] :css
+                _ -> bind (SUBREGEX [recursive c]) (opUnario $ SUBREGEX $ cs:css)
+opUnario x = x
+
 
 reversa :: PreRegex -> PreRegex
 reversa (SUBREGEX l) = SUBREGEX $ map reversa (reverse l)
@@ -71,15 +61,15 @@ preParser (SUBREGEX []) (ESTRELLA:_) = err -- Los operadores siempre deben estar
 preParser (SUBREGEX []) (DISYUNCION:_) = err -- Los operadores siempre deben estar aplicados
 preParser (SUBREGEX []) (MAS:_) = err -- Los operadores siempre deben estar aplicados
 preParser (SUBREGEX []) (INTERROGACION:_) = err -- Los operadores siempre deben estar aplicados
-preParser (SUBREGEX xs) (c:cs) = 
+preParser (SUBREGEX xs) (c:cs) =
     case c of
+        INTERROGACION -> preParser (SUBREGEX $ OPERADOR INTERROGACION :xs) cs
+        DISYUNCION    -> preParser (SUBREGEX $ OPERADOR DISYUNCION :xs) cs
         (SIMBOLO s)   -> preParser (SUBREGEX $ TERMINAL (Simbo s) :xs) cs
         ESTRELLA      -> preParser (SUBREGEX $ OPERADOR ESTRELLA :xs) cs
-        DISYUNCION    -> preParser (SUBREGEX $ OPERADOR DISYUNCION :xs) cs
-        MAS           -> preParser (SUBREGEX $ OPERADOR MAS :xs) cs
-        INTERROGACION -> preParser (SUBREGEX $ OPERADOR INTERROGACION :xs) cs
         PUNTO         -> preParser (SUBREGEX $ TERMINAL Punto :xs) cs
         EPSILON       -> preParser (SUBREGEX $ TERMINAL Epsil :xs) cs
+        MAS           -> preParser (SUBREGEX $ OPERADOR MAS :xs) cs
         NEGACION      -> case cs of
             (SIMBOLO s : css) -> preParser (SUBREGEX $ TERMINAL (Negac s):xs) css
             _                 -> err
@@ -92,7 +82,7 @@ preParser (SUBREGEX xs) (c:cs) =
                 _                        -> err
         RPAR -> (SUBREGEX xs, c:cs) -- No sacamos el paréntesis, para poder detectar errores.
 
-        LCOR -> 
+        LCOR ->
             let consumeCad zs ((SIMBOLO s):ws) = consumeCad (zs ++ [s]) ws
                 consumeCad zs (RCOR:ws) = (zs, ws)
                 consumeCad _ _ = ([], [])
@@ -101,5 +91,4 @@ preParser (SUBREGEX xs) (c:cs) =
                 ([], [])           -> err
                 (corchetes, resto) -> preParser (SUBREGEX $ TERMINAL (Rango corchetes) :xs) resto
         RCOR -> err  -- Este caso nunca debería darse
-
-preParser _ _                  = err
+preParser _ _ = err
