@@ -1,9 +1,15 @@
 {-# LANGUAGE InstanceSigs #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DeriveGeneric #-}
+
 
 module Regex
 ( Regex(..)
 , Terminal(..)
 ) where
+
+import Data.Hashable (Hashable)
+import GHC.Generics (Generic)
 
 data Regex
     = Null --Valor base para poder tener un acumulador inicial
@@ -13,7 +19,7 @@ data Regex
     | Mas Regex -- +
     | Rep Regex -- *
     | Int Regex -- ?
-    deriving (Eq)
+    deriving (Eq, Generic, Hashable)
 
 -- tipo de dato para encapsular todo slos tipos de terminales
 data Terminal
@@ -22,7 +28,7 @@ data Terminal
     | Simbo Char
     | Punto
     | Epsil
-    deriving(Eq)
+    deriving(Eq, Generic, Hashable)
 
 -- forma de ver para debuggeo
 instance Show Terminal where

@@ -1,20 +1,30 @@
 module Afd
 ( shift
-, markFirst
 , match
+, afd
+, markFirst
 ) where
 
 import Regex
+import Data.List (nub)
+import qualified Data.HashMap.Strict as HM
+
+
+-- markFirst :: Regex -> Regex
+-- markFirst Null = Null
+-- markFirst (Ter _ Epsil) = Ter False Epsil
+-- markFirst (Ter _ t) = Ter True t
+-- markFirst (Dis p q) = Dis (markFirst p) (markFirst q)
+-- markFirst (Sec p q) = Sec (markFirst p) (if empty p then markFirst q else q)
+-- markFirst (Mas m) = Mas (markFirst m)
+-- markFirst (Rep r) = Rep (markFirst r)
+-- markFirst (Int i) = Int (markFirst i)
 
 markFirst :: Regex -> Regex
-markFirst Null = Null
-markFirst (Ter _ Epsil) = Ter False Epsil
-markFirst (Ter _ t) = Ter True t
-markFirst (Dis p q) = Dis (markFirst p) (markFirst q)
-markFirst (Sec p q) = Sec (markFirst p) (if empty p then markFirst q else q)
-markFirst (Mas m) = Mas (markFirst m)
-markFirst (Rep r) = Rep (markFirst r)
-markFirst (Int i) = Int (markFirst i)
+markFirst = Sec (Ter True Epsil)
+
+pozo :: Regex -> Regex
+pozo = Sec (Ter False Epsil)
 
 -- Se puede optimizar con recursión de cola
 shift :: Bool -> Regex -> Char -> Regex
@@ -46,7 +56,7 @@ empty (Mas _) = False
 empty (Rep _) = True
 empty (Int _) = True
 
--- Si la expresión es anulable
+-- Si es un estado final
 final :: Regex -> Bool
 final Null = False
 final (Ter b _) = b
@@ -60,3 +70,79 @@ final (Int i) = final i
 match :: Regex -> String -> Bool
 match r [] = empty r
 match r (c:cs) = final (foldl (shift False) (shift True r c) cs)
+
+getAlphabet :: Regex -> String
+getAlphabet Null = ""
+getAlphabet (Ter _ x) =
+    case x of
+        (Rango r) -> r
+        (Negac n) -> [n]
+        (Simbo s) -> [s]
+        Punto -> ""
+        Epsil -> ""
+getAlphabet (Dis x y) = getAlphabet x ++ getAlphabet y
+getAlphabet (Sec x y) = getAlphabet x ++ getAlphabet y
+getAlphabet (Mas x) = getAlphabet x
+getAlphabet (Rep x) = getAlphabet x
+getAlphabet (Int x) = getAlphabet x
+
+alphabet :: Regex -> String
+alphabet = nub . getAlphabet
+
+afd :: Regex -> ([(Int, Bool)], [(Int, Int, Char)])
+afd regex = let (hm, aristas) = getAfd regex
+            in (markFinals hm, aristas)
+
+getAfd :: Regex -> (HM.HashMap Regex Int, [(Int, Int, Char)])
+getAfd r = createAFD [markFirst r] (alphabet r) (alphabet r) 1 [] (HM.fromList [(markFirst r, 0), (pozo r, -1)])
+
+createAFD :: [Regex] -> String -> String -> Int -> [(Int, Int, Char)] -> HM.HashMap Regex Int -> (HM.HashMap Regex Int, [(Int, Int, Char)])
+createAFD [] _ _ _ aristas estados = (estados,aristas)
+createAFD (_:rs) [] alfabeto contador aristas estados = createAFD rs alfabeto alfabeto contador aristas estados
+createAFD (r:rs) (a:as) alfabeto contador aristas estados =
+    let nuevoEstado = shift False r a
+    in case HM.lookup r estados of
+        Nothing -> (HM.fromList [], [(0,0,'-')]) -- Este caso no debería darse
+        (Just num1) -> case HM.lookup nuevoEstado estados of
+            Nothing -> createAFD ((r:rs) ++ [nuevoEstado]) as alfabeto (contador+1) ((num1, contador, a):aristas) (HM.insert nuevoEstado contador estados)
+            (Just (-1)) -> createAFD (r:rs) as alfabeto contador aristas estados
+            (Just num2) -> createAFD (r:rs) as alfabeto contador ((num1, num2, a):aristas) estados
+
+
+markFinals :: HM.HashMap Regex Int -> [(Int, Bool)]
+markFinals = HM.foldrWithKey isFinal []
+    where
+        isFinal _ (-1) acc = acc
+        isFinal regex indice acc = (indice, final regex):acc
+
+-- afd :: Regex -> (Int, [(Int, Int, Char)])
+-- afd r = createAFD [markFirst r] (alphabet r) (alphabet r) 1 [] (HM.fromList [(markFirst r, 0), (pozo r, -1)])
+
+-- createAFD :: [Regex] -> String -> String -> Int -> [(Int, Int, Char)] -> HM.HashMap Regex Int -> (Int, [(Int, Int, Char)])
+-- createAFD [] _ _ contador aristas _ = (contador-1, aristas)
+-- createAFD (_:rs) [] alfabeto contador aristas estados = createAFD rs alfabeto alfabeto contador aristas estados
+-- createAFD (r:rs) (a:as) alfabeto contador aristas estados =
+--     let nuevoEstado = shift False r a
+--     in case HM.lookup r estados of
+--         Nothing -> (0, [(0,0,'-')]) -- Este caso no debería darse
+--         (Just num1) -> case HM.lookup nuevoEstado estados of
+--             Nothing -> createAFD ((r:rs) ++ [nuevoEstado]) as alfabeto (contador+1) ((num1, contador, a):aristas) (HM.insert nuevoEstado contador estados)
+--             (Just (-1)) -> createAFD (r:rs) as alfabeto contador aristas estados
+--             (Just num2) -> createAFD (r:rs) as alfabeto contador ((num1, num2, a):aristas) estados
+
+
+-- afd :: Regex -> HM.HashMap Regex Int
+-- afd r = createAFD [markFirst r] (alphabet r) (alphabet r) 1 [] (HM.fromList [(markFirst r, 0), (pozo r,-1)])
+
+-- ------------ regex, letras, alfabeto, contador, aristas, estados
+-- createAFD :: [Regex] -> String -> String -> Int -> [(Int, Int, Char)] -> HM.HashMap Regex Int -> HM.HashMap Regex Int
+-- createAFD [] _ _ _ _ x = x
+-- createAFD (_:rs) [] alfabeto contador aristas estados = createAFD rs alfabeto alfabeto contador aristas estados
+-- createAFD (r:rs) (a:as) alfabeto contador aristas estados =
+--     let nuevoEstado = shift False r a
+--     in case HM.lookup r estados of
+--         Nothing -> estados -- Este caso no debería darse
+--         (Just num1) -> case HM.lookup nuevoEstado estados of
+--             Nothing -> createAFD ((r:rs) ++ [nuevoEstado]) as alfabeto (contador+1) ((num1, contador, a):aristas) (HM.insert nuevoEstado contador estados)
+--             (Just (-1)) -> createAFD (r:rs) as alfabeto contador aristas estados
+--             (Just num2) -> createAFD (r:rs) as alfabeto contador ((num1, num2, a):aristas) estados

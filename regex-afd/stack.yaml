@@ -31,6 +31,11 @@ resolver:
 #   - wai
 packages:
 - .
+
+extra-deps:
+  - unordered-containers-0.2.19.1
+  - hashable-1.4.2.0
+
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:
