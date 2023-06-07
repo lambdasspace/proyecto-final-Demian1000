@@ -33,11 +33,12 @@ ender = "  </g>\n</svg>"
 
 --ring ::
 
-rectangle :: Int -> Int -> Int -> Int -> Int -> String
-rectangle x y width height numero =
+rectangle :: Int -> Int -> Int -> Int -> Int -> Bool -> String
+rectangle x y width height numero b =
     "    <rect x='" ++ show (scaleM x) ++ "' y='" ++ show (scaleM y) ++ "' " ++
     "width='" ++ show (scale width) ++ "' height='" ++ show (scale height) ++
-    "' style='stroke-width:3; stroke:black;fill:ghostwhite'/>\n" ++
+    "' style='stroke-width:3; stroke:black;fill:" ++ (if b then "khaki" else "ghostwhite") ++
+    "'/>\n" ++
     num numero (fromIntegral x + fromIntegral width/2) (fromIntegral y + fromIntegral height/2)
 
 num :: Int -> Float -> Float -> String
@@ -67,13 +68,3 @@ line ((x1, y1), (x2, y2))
         "    <line x1='" ++ show (20 + scaleM x1) ++ "' y1='" ++ show (20 + scaleM y1) ++ 
         "' x2='" ++ show (20 + scaleM x2) ++ "' y2='" ++ show (20 + scaleM y2) ++ 
         "' style='stroke:black;stroke-width:2' />\n"
-
-
-
-
-
---straightLine
-
---bendedLine
-
---arrow

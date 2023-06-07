@@ -13,10 +13,9 @@ nodos (vertices, aristas) = nodePlacement vertices aristas
 drawAfd :: ([(Int, Bool)], [(Int, Int, Char)]) -> String
 drawAfd (vertices, aristas) =
     let nodos = nodePlacement vertices aristas
-        toSvg num (x, y, xx, yy, b) acc = acc ++ rectangle x y xx yy num
+        toSvg num (x, y, xx, yy, b) acc = acc ++ rectangle x y xx yy num b
         contenido = HM.foldrWithKey toSvg "" nodos
         transiciones = drawEdges aristas nodos
-        debug = rectangle 0 0 1 1 (-1)
     in header (getWidth nodos) (getHeight nodos) ++ transiciones ++ contenido ++ ender
 
 
