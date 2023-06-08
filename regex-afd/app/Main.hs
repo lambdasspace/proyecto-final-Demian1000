@@ -4,28 +4,25 @@ import System.IO
 import Lexer ( lexer )
 import PreParser ( preParse )
 import Parser ( parse )
-import Afd ( shift, afd, markFirst )
-import DrawAfd ( drawAfd, nodos )
+import Afd ( afd )
+import DrawAfd ( drawAfd )
 
 main :: IO ()
 main = do
-    putStrLn "Enter a regular expression:"
+    putStrLn "Ingresa una expresión regular ʕ•́ᴥ•̀ʔっ:"
     input <- getLine
-    putStrLn "Input received. Tokenizing..."
-    case lexer "abcdefghijklmnñopqrstuvwxyz" '-' input of
+    putStrLn "Entrada recibida. Procesando..."
+    case lexer "abcdefghijklmnñopqrstuvwxyz" '-' input of -- el alfabeto y epsilon
         Just tokens -> do
             case preParse  tokens of
                 Just algo -> do
                     let regex = parse algo
                     write $ drawAfd (afd regex)
-                    print algo
-                    print (shift False (markFirst regex) 'a')
-                    print (shift False (shift False (markFirst regex) 'a') 'a')
-                    print (afd regex)
-                    print $ nodos (afd regex)
-                Nothing -> putStrLn "Error en el pre parseo."
-        Nothing -> putStrLn "Invalid regular expression."
+                    putStrLn "Listo ! ᕙ(`▿´)ᕗ"
+                Nothing -> putStrLn "Expresión inválida (>‿◠)✌"
+        Nothing -> putStrLn "Expresión inválida (>‿◠)✌"
 
+write :: String -> IO()
 write str = do
     let file = "afd.svg"
     handle <- openFile file WriteMode

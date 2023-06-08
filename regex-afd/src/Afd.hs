@@ -10,16 +10,6 @@ import Data.List (nub)
 import qualified Data.HashMap.Strict as HM
 
 
--- markFirst :: Regex -> Regex
--- markFirst Null = Null
--- markFirst (Ter _ Epsil) = Ter False Epsil
--- markFirst (Ter _ t) = Ter True t
--- markFirst (Dis p q) = Dis (markFirst p) (markFirst q)
--- markFirst (Sec p q) = Sec (markFirst p) (if empty p then markFirst q else q)
--- markFirst (Mas m) = Mas (markFirst m)
--- markFirst (Rep r) = Rep (markFirst r)
--- markFirst (Int i) = Int (markFirst i)
-
 markFirst :: Regex -> Regex
 markFirst = Sec (Ter True Epsil)
 
@@ -114,35 +104,3 @@ markFinals = HM.foldrWithKey isFinal []
     where
         isFinal _ (-1) acc = acc
         isFinal regex indice acc = (indice, final regex):acc
-
--- afd :: Regex -> (Int, [(Int, Int, Char)])
--- afd r = createAFD [markFirst r] (alphabet r) (alphabet r) 1 [] (HM.fromList [(markFirst r, 0), (pozo r, -1)])
-
--- createAFD :: [Regex] -> String -> String -> Int -> [(Int, Int, Char)] -> HM.HashMap Regex Int -> (Int, [(Int, Int, Char)])
--- createAFD [] _ _ contador aristas _ = (contador-1, aristas)
--- createAFD (_:rs) [] alfabeto contador aristas estados = createAFD rs alfabeto alfabeto contador aristas estados
--- createAFD (r:rs) (a:as) alfabeto contador aristas estados =
---     let nuevoEstado = shift False r a
---     in case HM.lookup r estados of
---         Nothing -> (0, [(0,0,'-')]) -- Este caso no debería darse
---         (Just num1) -> case HM.lookup nuevoEstado estados of
---             Nothing -> createAFD ((r:rs) ++ [nuevoEstado]) as alfabeto (contador+1) ((num1, contador, a):aristas) (HM.insert nuevoEstado contador estados)
---             (Just (-1)) -> createAFD (r:rs) as alfabeto contador aristas estados
---             (Just num2) -> createAFD (r:rs) as alfabeto contador ((num1, num2, a):aristas) estados
-
-
--- afd :: Regex -> HM.HashMap Regex Int
--- afd r = createAFD [markFirst r] (alphabet r) (alphabet r) 1 [] (HM.fromList [(markFirst r, 0), (pozo r,-1)])
-
--- ------------ regex, letras, alfabeto, contador, aristas, estados
--- createAFD :: [Regex] -> String -> String -> Int -> [(Int, Int, Char)] -> HM.HashMap Regex Int -> HM.HashMap Regex Int
--- createAFD [] _ _ _ _ x = x
--- createAFD (_:rs) [] alfabeto contador aristas estados = createAFD rs alfabeto alfabeto contador aristas estados
--- createAFD (r:rs) (a:as) alfabeto contador aristas estados =
---     let nuevoEstado = shift False r a
---     in case HM.lookup r estados of
---         Nothing -> estados -- Este caso no debería darse
---         (Just num1) -> case HM.lookup nuevoEstado estados of
---             Nothing -> createAFD ((r:rs) ++ [nuevoEstado]) as alfabeto (contador+1) ((num1, contador, a):aristas) (HM.insert nuevoEstado contador estados)
---             (Just (-1)) -> createAFD (r:rs) as alfabeto contador aristas estados
---             (Just num2) -> createAFD (r:rs) as alfabeto contador ((num1, num2, a):aristas) estados

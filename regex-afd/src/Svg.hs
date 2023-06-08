@@ -1,26 +1,30 @@
 module Svg
-( header
-, ender
-, rectangle
-, num
+( svgHeader
+, svgEnder
+, svgRectangle
+, svgNum
 , svgChar
-, line
+, svgLine
 ) where
 
+
+sc :: Int
+sc = 40
+
 scale :: Int -> Int
-scale = (40*)
+scale = (sc*)
 
 scaleM :: Int -> Int
-scaleM = (40+).(40*)
+scaleM = (sc+).(sc*)
 
 fscaleM :: Float -> Float
-fscaleM = (40+).(40*)
+fscaleM = (fromIntegral sc+).(fromIntegral sc*)
 
 scaleL :: Int -> Int
-scaleL = (60+).(40*)
+scaleL = (sc+div sc 2 +).(sc*)
 
-header :: Int -> Int -> String
-header width height =
+svgHeader :: Int -> Int -> String
+svgHeader width height =
     "<?xml version='1.0' encoding='UTF-8' ?>\n" ++ 
     "<svg width='" ++ show (scaleM width) ++ "' height='" ++
     show (scaleM height) ++ "'>\n  <g>\n" ++
@@ -28,21 +32,19 @@ header width height =
     "width='" ++ show (scaleM width) ++ "' height='" ++ show (scaleM height) ++
     "' style='stroke-width:3; stroke:black;fill:ghostwhite'/>\n"
 
-ender :: String
-ender = "  </g>\n</svg>"
+svgEnder :: String
+svgEnder = "  </g>\n</svg>"
 
---ring ::
-
-rectangle :: Int -> Int -> Int -> Int -> Int -> Bool -> String
-rectangle x y width height numero b =
+svgRectangle :: Int -> Int -> Int -> Int -> Int -> Bool -> String
+svgRectangle x y width height numero b =
     "    <rect x='" ++ show (scaleM x) ++ "' y='" ++ show (scaleM y) ++ "' " ++
     "width='" ++ show (scale width) ++ "' height='" ++ show (scale height) ++
     "' style='stroke-width:3; stroke:black;fill:" ++ (if b then "khaki" else "ghostwhite") ++
     "'/>\n" ++
-    num numero (fromIntegral x + fromIntegral width/2) (fromIntegral y + fromIntegral height/2)
+    svgNum numero (fromIntegral x + fromIntegral width/2) (fromIntegral y + fromIntegral height/2)
 
-num :: Int -> Float -> Float -> String
-num i x y = "    <text x='" ++ show (fscaleM x) ++ "' y='" ++ show (fscaleM y) ++
+svgNum :: Int -> Float -> Float -> String
+svgNum i x y = "    <text x='" ++ show (fscaleM x) ++ "' y='" ++ show (fscaleM y) ++
             "' fill='black'>" ++ show i ++ "</text>\n"
 
 
@@ -50,21 +52,8 @@ svgChar :: Int -> Int -> Char -> String
 svgChar x y c = "    <text x='" ++ show (scaleM x) ++ "' y='" ++ show (scaleM y) ++
              "' fill='black'>" ++ [c] ++ "</text>\n"
 
-line :: ((Int, Int), (Int, Int)) -> String
-line ((x1, y1), (x2, y2))
-    | y1 == y2 && x1 < x2 =
-        "    <line x1='" ++ show (20 + scaleM x1) ++ "' y1='" ++ show (20 + scaleM y1) ++ 
-        "' x2='" ++ show (20 + scaleM x2) ++ "' y2='" ++ show (20 + scaleM y2) ++ 
-        "' style='stroke:black;stroke-width:2' />\n"
-    | y1 == y2 =
-        "    <line x1='" ++ show (20 + scaleM x1) ++ "' y1='" ++ show (20 + scaleM y1) ++ 
-        "' x2='" ++ show (20 + scaleM x2) ++ "' y2='" ++ show (20 + scaleM y2) ++ 
-        "' style='stroke:black;stroke-width:2' />\n"
-    | y1 < y2 =
-        "    <line x1='" ++ show (20 + scaleM x1) ++ "' y1='" ++ show (20 + scaleM y1) ++ 
-        "' x2='" ++ show (20 + scaleM x2) ++ "' y2='" ++ show (20 + scaleM y2) ++ 
-        "' style='stroke:black;stroke-width:2' />\n"
-    | otherwise =
-        "    <line x1='" ++ show (20 + scaleM x1) ++ "' y1='" ++ show (20 + scaleM y1) ++ 
-        "' x2='" ++ show (20 + scaleM x2) ++ "' y2='" ++ show (20 + scaleM y2) ++ 
-        "' style='stroke:black;stroke-width:2' />\n"
+svgLine :: ((Int, Int), (Int, Int)) -> String
+svgLine ((x1, y1), (x2, y2)) =
+    "    <line x1='" ++ show (scaleL x1) ++ "' y1='" ++ show (scaleL y1) ++ 
+    "' x2='" ++ show (scaleL x2) ++ "' y2='" ++ show (scaleL y2) ++ 
+    "' style='stroke:black;stroke-width:2' />\n"
