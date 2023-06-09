@@ -7,6 +7,11 @@ import Parser ( parse )
 import Afd ( afd )
 import DrawAfd ( drawAfd )
 
+{- | Ejecuta el programa, pide una cadena de entrada,
+y devuelve un mensaje si ocurre un error.
+
+Si no ocurre ningún error, guarda el AFD en afd.svg .
+-}
 main :: IO ()
 main = do
     putStrLn "Ingresa una expresión regular ʕ•́ᴥ•̀ʔっ:"
@@ -22,6 +27,7 @@ main = do
                 Nothing -> putStrLn "Expresión inválida (>‿◠)✌"
         Nothing -> putStrLn "Expresión inválida (>‿◠)✌"
 
+-- | Escribe una cadena en el archivo afd.svg
 write :: String -> IO()
 write str = do
     let file = "afd.svg"

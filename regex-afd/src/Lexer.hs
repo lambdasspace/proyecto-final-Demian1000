@@ -1,12 +1,26 @@
+{- | Módulo para hacer el análisis léxico de la entrada.
+
+Esta es la primera fase para procesar la cadena de entrada,
+se verifica que todos los caracteres de entrada sean válidos
+y se genera una lista con los Tokens de entrada.
+-}
 module Lexer
   ( lexer
   ) where
 
 import Token
 
--- Ignora los espacios en blanco
--- Convierte en tokens toda la cadena de entrada
--- Si hay un símbolo no permitido manda error.
+{- | Revisa que todos los caracteres de entrada sean válidos
+y genera una lista de tokens si no hay errores.
+
+Ignora los espacios en blanco.
+
+Si hay un símbolo no permitido regresa Nothing.
+
+El primer parámetro es el alfabeto permitido.
+El segundo parámetro es el caracter correspondiente a epsilon.
+El tercer parámetro es la cadena de entrada.
+-}
 lexer :: [Char] -> Char -> String -> Maybe [Token]
 lexer _ _ [] = Just []
 lexer alfabeto epsilon (c:cs)
@@ -25,5 +39,6 @@ lexer alfabeto epsilon (c:cs)
     | isWhitespace c    = lexer alfabeto epsilon cs
     | otherwise         = Nothing
 
+-- | Detecta si un caracter corresponde a un espacio en blanco.
 isWhitespace :: Char -> Bool
 isWhitespace c = c `elem` [' ', '\t', '\n', '\r', '\v']

@@ -1,3 +1,4 @@
+{- | Módulo para generar la Regex a partir de una PreRegex -}
 module Parser
     ( Regex(..)
     , parse
@@ -7,14 +8,12 @@ import PreRegex
 import Token
 import Regex
 
+-- | Construye el Regex a partir de un PreRegex.
 parse :: PreRegex -> Regex
 parse = construyeRegex Null 
 
+-- | Función recursiva para crear un Regex.
 construyeRegex :: Regex -> PreRegex -> Regex
--- construyeRegex Null (Terminal t) =
--- construyeRegex acc (Terminal t) = -- Caso sus
--- construyeRegex Null (OPERADOR o) = Null
--- construyeRegex acc (OPERADOR o)
 construyeRegex acc (SUBREGEX []) = acc
 construyeRegex Null (SUBREGEX (x:xs)) =
     case x of

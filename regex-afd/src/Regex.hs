@@ -2,7 +2,13 @@
 {-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE DeriveGeneric #-}
 
+{- | Tipo de dato para representar las expresiones regulares.
 
+Esta representación se basa en la presentada en el artículo:
+
+Fischer, S., Huch, F., & Wilke, T. (2010). A play on regular expressions:
+functional pearl. ACM SIGPLAN International Conference on Functional Programming
+-}
 module Regex
 ( Regex(..)
 , Terminal(..)
@@ -11,6 +17,7 @@ module Regex
 import Data.Hashable (Hashable)
 import GHC.Generics (Generic)
 
+-- | Tipo de expresiones regulares.
 data Regex
     = Null --Valor base para poder tener un acumulador inicial
     | Ter Bool Terminal
@@ -21,7 +28,7 @@ data Regex
     | Int Regex -- ?
     deriving (Eq, Generic, Hashable)
 
--- tipo de dato para encapsular todo slos tipos de terminales
+-- | Tipo de dato para encapsular todo slos tipos de terminales.
 data Terminal
     = Rango String
     | Negac Char
@@ -30,7 +37,7 @@ data Terminal
     | Epsil
     deriving(Eq, Generic, Hashable)
 
--- forma de ver para debuggeo
+-- | Forma de ver para debuggeo
 instance Show Terminal where
     show :: Terminal -> String
     show (Rango r) = "[" ++ r ++ "]"
@@ -39,12 +46,13 @@ instance Show Terminal where
     show Punto = "."
     show Epsil = "ε"
 
+-- | Forma de ver para debugeo
 instance Show Regex where
     show :: Regex -> String
     show Null = ""
     show (Ter b t) = (if b then "•" else "") ++ show t
-    show (Dis a b) = "Dis (" ++ (show a) ++ ") (" ++ (show b) ++ ")"
-    show (Sec a b) = (show a) ++ (show b)
-    show (Mas m) = "(Mas " ++ (show m) ++ ")"
-    show (Rep m) = "(Rep " ++ (show m) ++ ")"
-    show (Int m) = "(Int " ++ (show m) ++ ")"
+    show (Dis a b) = "Dis (" ++ show a ++ ") (" ++ show b ++ ")"
+    show (Sec a b) = show a ++ show b
+    show (Mas m) = "(Mas " ++ show m ++ ")"
+    show (Rep m) = "(Rep " ++ show m ++ ")"
+    show (Int m) = "(Int " ++ show m ++ ")"

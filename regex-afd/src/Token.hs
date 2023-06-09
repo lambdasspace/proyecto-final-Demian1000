@@ -1,3 +1,9 @@
+{- | Tipo de dato para encapsular los caracteres válidos
+dentro de una expresión regular, representan todos los
+operadores y los símbolos terminales.
+
+Sirven para el anáĺisis léxico.
+-}
 module Token
 ( Token (..)
 )where
@@ -17,6 +23,7 @@ data Token
     | EPSILON
     deriving (Eq)
 
+-- | Función para que sea más sencillo debuggear.
 instance Show Token where
     show (SIMBOLO c) = [c]
     show ESTRELLA = "*"

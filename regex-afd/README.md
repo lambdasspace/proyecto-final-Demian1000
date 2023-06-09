@@ -8,14 +8,14 @@ Este proyecto consiste en un programa que pueda leer expresiones regulares por l
 
 Los operadores válidos para expresiones regulares se presentan a continuación, en su orden de precedencia, los operadores binarios asocian a la izquierda:
 
-|símbolo | operador| precedencia |
-|--------|---------|-------------|
-| \| | disyunción | 3
-| αβ| concatenacion| 2
-| * | estrella de kleene | 1
-| + | cerradura positiva | 1
-| ? | 0 o 1 ocurrencia | 1
-| ()| paréntesis |  0
+|símbolo | operador           | precedencia |
+|--------|--------------------|-------------|
+| \|     | disyunción         | 3           |
+| αβ     | concatenacion      | 2           |
+| *      | estrella de kleene | 1           |
+| +      | cerradura positiva | 1           |
+| ?      | 0 o 1 ocurrencia   | 1           |
+| ()     | paréntesis         | 0           |
 
 Además, tenemos los siguientes símbolos terminales:
 
@@ -25,7 +25,7 @@ Además, tenemos los siguientes símbolos terminales:
 
 ~ : negación de un caracter
 
-. : cualquier caracter
+. : cualquier caracter (TIENE BUGS)
 
 \- : la cadena vacía (epsilon)
 
@@ -44,6 +44,8 @@ La salida es un afd, en el cual los estados finales están coloreados de amarill
 
 #### Ejecución:
 > stack exec regex-afd-exe
+o
+> stack run
 
 ### **Dependencias:**
 Este proyecto ocupa las siguientes dependencias para funcionar:

@@ -1,3 +1,10 @@
+{- | Módulo para hacer pre procesamientos en la lista de tokens
+antes de generar su expresión regular.
+
+Las transformaciones que hace este módulo facilita la construcción
+del Regex, y garantiza que los operadores estén bien aplicados,
+y que los paréntesis o corchetes estén balanceados.
+-}
 module PreParser
     ( PreRegex(..)
     , Terminal(..)
@@ -8,15 +15,7 @@ import Token
 import PreRegex
 import Regex (Terminal(..))
 
---parentesis balanceados
---corchetes bien ponidos
--- operadores bien aplicados
--- distintos niveles de expresones parentisadas
--- terminales encapsulados
-
--- Con esto construir el ASA esta ez pez
---reversa de la lista
-
+-- | Aplica las funciones para obtener PreRegex a partir de una lista de Tokens.
 preParse :: [Token] -> Maybe PreRegex
 preParse tokens =
     case preParser (SUBREGEX []) tokens of
@@ -24,6 +23,11 @@ preParse tokens =
         (_, _:_)          -> Nothing
         (preregex, [])    -> Just $ opUnario $ reversa preregex
 
+{- | Recorre la estructura PreRegex, buscando operadores unarios,
+mete los operadores unarios junto con la expresión a la que se le aplica
+en sub-expresiones SUBREGEX; de esta nos aseguramos que los operadores
+se estén aplicando en su alcance correcto.
+-}
 opUnario :: PreRegex -> PreRegex
 opUnario (SUBREGEX ls) =
     let
@@ -43,17 +47,30 @@ opUnario (SUBREGEX ls) =
                 _ -> bind (SUBREGEX [recursive c]) (opUnario $ SUBREGEX $ cs:css)
 opUnario x = x
 
-
+-- | Invierte el orden de una PreRegex.
 reversa :: PreRegex -> PreRegex
 reversa (SUBREGEX l) = SUBREGEX $ map reversa (reverse l)
 reversa x = x
 
--- Definimos una constante para los errores
+-- | Constante para representar los errores en la función.
 err :: (PreRegex, [a])
 err = (SUBREGEX [], [])
 
--- Devuelve la lista al revés
--- Si devuelve err la entrada era inválida
+{- | Trnasforma una lista de Tokens en una PreRegex, mientras revisa
+que la lista de tokens sea válida.
+Revisa que los operadores están bien aplicados, y crea subexpresiones para
+encapsular las expresiones dentro de los paréntesis, (para que se respete la
+precedencia posteriormente).
+También se asegura que los paréntesis y los corchetes estén balanceados,
+y que dentro de los corchetes solo haya caracteres.
+
+Devuelve el PreRegex al revés.
+
+Si devuelve (SUBREGEX [], []) significa que la entrada era inválida.
+
+El primer parámetro es el acumulador de la PreRegex.
+El segundo parámetro es la lista de tokens que se está leyendo.
+-}
 preParser :: PreRegex -> [Token] -> (PreRegex, [Token])
 preParser (SUBREGEX []) [] = err  -- La expresión regular vacia es un error
 preParser subregex [] = (subregex, []) -- Caso base, si terminamos de leer todos los tokens

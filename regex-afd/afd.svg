@@ -1,43 +1,76 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<svg width='640' height='600'>
+<svg width='1120' height='1160'>
   <g>
-    <rect x='0' y='0' width='640' height='600' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
-    <line x1='500' y1='180' x2='540' y2='180' style='stroke:black;stroke-width:2' />
-    <line x1='540' y1='220' x2='500' y2='220' style='stroke:black;stroke-width:2' />
-    <line x1='540' y1='180' x2='540' y2='220' style='stroke:black;stroke-width:2' />
-    <line x1='500' y1='220' x2='500' y2='180' style='stroke:black;stroke-width:2' />
-    <text x='480' y='200' fill='black'>n</text>
-    <text x='120' y='440' fill='black'>c</text>
-    <text x='200' y='520' fill='black'>l</text>
-    <text x='280' y='360' fill='black'>a</text>
-    <text x='360' y='40' fill='black'>r</text>
-    <text x='440' y='280' fill='black'>i</text>
-    <text x='560' y='120' fill='black'>n</text>
-    <line x1='60' y1='460' x2='140' y2='460' style='stroke:black;stroke-width:2' />
+    <rect x='0' y='0' width='1120' height='1160' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <line x1='340' y1='660' x2='420' y2='660' style='stroke:black;stroke-width:2' />
+    <line x1='380' y1='740' x2='340' y2='740' style='stroke:black;stroke-width:2' />
+    <line x1='460' y1='780' x2='540' y2='780' style='stroke:black;stroke-width:2' />
+    <line x1='500' y1='820' x2='460' y2='820' style='stroke:black;stroke-width:2' />
+    <line x1='420' y1='660' x2='420' y2='700' style='stroke:black;stroke-width:2' />
+    <line x1='340' y1='740' x2='340' y2='660' style='stroke:black;stroke-width:2' />
+    <line x1='540' y1='780' x2='540' y2='820' style='stroke:black;stroke-width:2' />
+    <line x1='460' y1='820' x2='460' y2='780' style='stroke:black;stroke-width:2' />
+    <text x='440' y='800' fill='black'>m</text>
+    <text x='320' y='680' fill='black'>y</text>
+    <text x='120' y='360' fill='black'>t</text>
+    <text x='200' y='520' fill='black'>o</text>
+    <text x='280' y='960' fill='black'>n</text>
+    <text x='360' y='1080' fill='black'>y</text>
+    <text x='480' y='1040' fill='black'>m</text>
+    <text x='560' y='680' fill='black'>m</text>
+    <text x='640' y='880' fill='black'>t</text>
+    <text x='720' y='840' fill='black'>o</text>
+    <text x='800' y='40' fill='black'>a</text>
+    <text x='880' y='440' fill='black'>n</text>
+    <text x='960' y='280' fill='black'>n</text>
+    <text x='1040' y='120' fill='black'>a</text>
+    <line x1='60' y1='380' x2='140' y2='380' style='stroke:black;stroke-width:2' />
     <line x1='140' y1='540' x2='220' y2='540' style='stroke:black;stroke-width:2' />
-    <line x1='220' y1='380' x2='300' y2='380' style='stroke:black;stroke-width:2' />
-    <line x1='300' y1='60' x2='380' y2='60' style='stroke:black;stroke-width:2' />
-    <line x1='380' y1='300' x2='460' y2='300' style='stroke:black;stroke-width:2' />
-    <line x1='460' y1='140' x2='580' y2='140' style='stroke:black;stroke-width:2' />
-    <line x1='140' y1='460' x2='140' y2='540' style='stroke:black;stroke-width:2' />
-    <line x1='220' y1='540' x2='220' y2='380' style='stroke:black;stroke-width:2' />
-    <line x1='300' y1='380' x2='300' y2='60' style='stroke:black;stroke-width:2' />
-    <line x1='380' y1='60' x2='380' y2='300' style='stroke:black;stroke-width:2' />
-    <line x1='460' y1='300' x2='460' y2='140' style='stroke:black;stroke-width:2' />
-    <line x1='580' y1='140' x2='580' y2='220' style='stroke:black;stroke-width:2' />
-    <rect x='520' y='200' width='80' height='40' style='stroke-width:3; stroke:black;fill:khaki'/>
-    <text x='560.0' y='220.0' fill='black'>6</text>
-    <rect x='440' y='120' width='40' height='40' style='stroke-width:3; stroke:black;fill:khaki'/>
-    <text x='460.0' y='140.0' fill='black'>5</text>
-    <rect x='360' y='280' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
-    <text x='380.0' y='300.0' fill='black'>4</text>
-    <rect x='280' y='40' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
-    <text x='300.0' y='60.0' fill='black'>3</text>
-    <rect x='200' y='360' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
-    <text x='220.0' y='380.0' fill='black'>2</text>
+    <line x1='220' y1='980' x2='300' y2='980' style='stroke:black;stroke-width:2' />
+    <line x1='300' y1='1100' x2='380' y2='1100' style='stroke:black;stroke-width:2' />
+    <line x1='300' y1='1060' x2='500' y2='1060' style='stroke:black;stroke-width:2' />
+    <line x1='380' y1='700' x2='580' y2='700' style='stroke:black;stroke-width:2' />
+    <line x1='500' y1='900' x2='660' y2='900' style='stroke:black;stroke-width:2' />
+    <line x1='500' y1='860' x2='740' y2='860' style='stroke:black;stroke-width:2' />
+    <line x1='660' y1='60' x2='820' y2='60' style='stroke:black;stroke-width:2' />
+    <line x1='740' y1='460' x2='900' y2='460' style='stroke:black;stroke-width:2' />
+    <line x1='820' y1='300' x2='980' y2='300' style='stroke:black;stroke-width:2' />
+    <line x1='980' y1='140' x2='1060' y2='140' style='stroke:black;stroke-width:2' />
+    <line x1='140' y1='380' x2='140' y2='540' style='stroke:black;stroke-width:2' />
+    <line x1='220' y1='540' x2='220' y2='980' style='stroke:black;stroke-width:2' />
+    <line x1='300' y1='980' x2='300' y2='1060' style='stroke:black;stroke-width:2' />
+    <line x1='380' y1='1100' x2='380' y2='700' style='stroke:black;stroke-width:2' />
+    <line x1='500' y1='1060' x2='500' y2='820' style='stroke:black;stroke-width:2' />
+    <line x1='580' y1='700' x2='580' y2='820' style='stroke:black;stroke-width:2' />
+    <line x1='660' y1='900' x2='660' y2='60' style='stroke:black;stroke-width:2' />
+    <line x1='740' y1='860' x2='740' y2='460' style='stroke:black;stroke-width:2' />
+    <line x1='820' y1='60' x2='820' y2='300' style='stroke:black;stroke-width:2' />
+    <line x1='900' y1='460' x2='900' y2='220' style='stroke:black;stroke-width:2' />
+    <line x1='980' y1='300' x2='980' y2='140' style='stroke:black;stroke-width:2' />
+    <line x1='1060' y1='140' x2='1060' y2='620' style='stroke:black;stroke-width:2' />
+    <rect x='1040' y='600' width='40' height='40' style='stroke-width:3; stroke:black;fill:khaki'/>
+    <text x='1060.0' y='620.0' fill='black'>11</text>
+    <rect x='960' y='120' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='980.0' y='140.0' fill='black'>10</text>
+    <rect x='880' y='200' width='40' height='40' style='stroke-width:3; stroke:black;fill:khaki'/>
+    <text x='900.0' y='220.0' fill='black'>9</text>
+    <rect x='800' y='280' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='820.0' y='300.0' fill='black'>8</text>
+    <rect x='720' y='440' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='740.0' y='460.0' fill='black'>7</text>
+    <rect x='640' y='40' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='660.0' y='60.0' fill='black'>6</text>
+    <rect x='480' y='800' width='120' height='120' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='540.0' y='860.0' fill='black'>5</text>
+    <rect x='360' y='680' width='80' height='80' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='400.0' y='720.0' fill='black'>4</text>
+    <rect x='280' y='1040' width='40' height='80' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='300.0' y='1080.0' fill='black'>3</text>
+    <rect x='200' y='960' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='220.0' y='980.0' fill='black'>2</text>
     <rect x='120' y='520' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
     <text x='140.0' y='540.0' fill='black'>1</text>
-    <rect x='40' y='440' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
-    <text x='60.0' y='460.0' fill='black'>0</text>
+    <rect x='40' y='360' width='40' height='40' style='stroke-width:3; stroke:black;fill:ghostwhite'/>
+    <text x='60.0' y='380.0' fill='black'>0</text>
   </g>
 </svg>
